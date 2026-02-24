@@ -15,6 +15,7 @@ services:
       db:
         condition: service_healthy
     restart: always
+    command: npm run dev
 
   db:
     image: postgres:16-alpine
