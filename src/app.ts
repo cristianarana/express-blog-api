@@ -8,8 +8,11 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+
 app.use("/api", routes);
 
-app.use(express.json());
+
+
 app.use(errorMiddleware);
 export default app;
