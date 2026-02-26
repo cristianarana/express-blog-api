@@ -13,4 +13,25 @@ export class UserController{
       next(error);
     }
   };
+
+  findByEmail = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const email = req.query.email as string;
+        const user = await this.userService.findByEmail(email);
+        res.json(user);
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        next(error);
+    }
+  };
+
+  update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updatedUser = await this.userService.updateUser(req.body);
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      next(error);
+    }
+  };
 }

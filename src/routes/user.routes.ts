@@ -5,5 +5,8 @@ const router = Router();
 const userController = new UserController();
 
 router.post("/create", userController.create);
+router.get("/", userController.findByEmail);
+router.patch("/update", userController.update);
+
 
 export default router;
