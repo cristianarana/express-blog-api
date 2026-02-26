@@ -1,6 +1,6 @@
 import { UserRepository } from "../repository/user.repository";
 import { AppError } from "../utils/AppError";
-import { CreateUserDTO, ResponseUserDTO, UpdateUserDTO } from "../models/user.model";
+import { CreateUserDTO, ResponseUserDTO, UpdateUserDTO, ResponseDeleteUserDTO } from "../models/user.model";
 
 
 export class UserService {
@@ -39,5 +39,14 @@ export class UserService {
       throw new AppError("User not found", 404);
     }
     return this.userRepository.updateUser(data);
+  }
+
+  async deleteUser(email: string): Promise<ResponseDeleteUserDTO> {
+    const findUser = await this.userRepository.findByEmail(email);
+    if (!findUser) {
+      throw new AppError("User not found", 404);
+    }
+    const deletedUser = this.userRepository.deleteUser(email)
+    return deletedUser;
   }
 }

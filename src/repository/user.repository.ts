@@ -1,5 +1,5 @@
 import  pool  from "../config/db";
-import { CreateUserDTO, ResponseUserDTO, User, ResponseSearchUserDTO } from "../models/user.model";
+import { CreateUserDTO, ResponseUserDTO, User, ResponseSearchUserDTO,ResponseDeleteUserDTO } from "../models/user.model";
 
 export class UserRepository {
     async create(userData: CreateUserDTO): Promise<ResponseUserDTO>{
@@ -22,6 +22,14 @@ export class UserRepository {
         const result = await pool.query(
             'UPDATE users SET name = COALESCE($1, name), password = COALESCE($3, password) WHERE email = $2 RETURNING name, email',
             [userData.name, userData.email, userData.password]
+        );
+        return result.rows[0];
+    }
+
+    async deleteUser(email: string): Promise<ResponseDeleteUserDTO> {
+        const result = await pool.query(
+            'UPDATE users SET deletedAt = NOW(), is_active = false WHERE email = $1 RETURNING name, email',
+            [email]
         );
         return result.rows[0];
     }

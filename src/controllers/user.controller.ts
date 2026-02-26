@@ -34,4 +34,15 @@ export class UserController{
       next(error);
     }
   };
+  
+  delete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const email = req.body.email as string;
+      await this.userService.deleteUser(email);
+      res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      next(error);
+    }
+  };
 }
