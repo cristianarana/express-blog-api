@@ -1,6 +1,6 @@
 import { UserRepository } from "../repository/user.repository";
 import { AppError } from "../utils/AppError";
-import { CreateUserDTO, ResponseUserDTO } from "../models/user.model";
+import { CreateUserDTO, ResponseUserDTO, UpdateUserDTO } from "../models/user.model";
 
 
 export class UserService {
@@ -12,10 +12,32 @@ export class UserService {
       throw new AppError("Missing required fields", 400);
     }
 
+    const existingUser = await this.userRepository.findByEmail(data.email);
+    if (existingUser) {
+      throw new AppError("Email already in use", 400);
+    }
+
     const user = await this.userRepository.create(data);
 
     const { name, email } = user;
 
     return { name, email };
+  }
+
+  async findByEmail(email: string) {
+    if (!email) {
+      throw new AppError("Email is required", 400);
+    }
+    return this.userRepository.findByEmail(email);
+  }
+
+  async updateUser(data:UpdateUserDTO): Promise<ResponseUserDTO> {
+    const email = data.email as string;
+    const findUser = await this.userRepository.findByEmail(email!);
+    
+    if (!findUser) {
+      throw new AppError("User not found", 404);
+    }
+    return this.userRepository.updateUser(data);
   }
 }
