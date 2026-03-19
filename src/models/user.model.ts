@@ -7,7 +7,7 @@ export interface User {
     deletedAt: Date
 }
 
-export type CreateUserDTO = Omit<User, "id" | "createdAt">;
+export type CreateUserDTO = Omit<User, "id" | "createdAt" | "deletedAt">;
 export type UpdateUserDTO = Partial<CreateUserDTO>;
 export type DeleteUserDTO = Partial<User>;
 export type ResponseUserDTO = Omit<User, "id" |  "password" | "deletedAt" | "is_active">;
